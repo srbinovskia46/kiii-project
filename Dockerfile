@@ -10,9 +10,6 @@
 ## Run the jar file
 #ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# Use a smaller base image for the runtime environment
-FROM openjdk:17-jdk-slim
-
 # Use an appropriate base image with JDK and Maven installed for building
 FROM maven:3.8.4-openjdk-17-slim AS builder
 
@@ -25,13 +22,16 @@ COPY mvnw.cmd .
 COPY pom.xml .
 
 # Set executable permissions for mvnw
-RUN chmod +x mvnw
+RUN chmod 777 mvnw
 
 # Copy the rest of your application source
 COPY src ./src
 
 # Build your application with Maven
 RUN ./mvnw clean package -DskipTests
+
+# Use a smaller base image for the runtime environment
+FROM openjdk:17-jdk-slim
 
 # Set the working directory
 WORKDIR /app
