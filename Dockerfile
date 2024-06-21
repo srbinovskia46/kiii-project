@@ -37,7 +37,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file from the builder stage
-COPY --from=builder /app/target/CarApp-0.0.1-SNAPSHOT.jar app.jar
+COPY target/CarApp-0.0.1-SNAPSHOT.jar app.jar
 
 # Command to run the application
 CMD ["java", "-jar", "app.jar"]
