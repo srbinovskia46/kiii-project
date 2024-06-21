@@ -2,6 +2,8 @@ package mk.ukim.finki.carapp.web;
 
 import mk.ukim.finki.carapp.model.Car;
 import mk.ukim.finki.carapp.service.CarService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +18,33 @@ public class CarController {
     }
 
     @GetMapping
-    public List<Car> getAllCars() {
-        return carService.getAllCars();
+    public ResponseEntity<List<Car>> getAllCars() {
+        List<Car> cars = carService.getAllCars();
+        return ResponseEntity.ok(cars);
     }
 
     @PostMapping
-    public Car createCar(@RequestBody Car car) {
-        return this.carService.createCar(car.getMake(), car.getModel(), car.getPower(), car.getTopSpeed());
+    public ResponseEntity<Car> createCar(@RequestBody Car car) {
+        Car createdCar = carService.createCar(car.getMake(), car.getModel(), car.getPower(), car.getTopSpeed());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCar);
     }
 
     @GetMapping("/{id}")
-    public Car getCarById(@PathVariable Long id) {
-        return carService.getCarById(id);
+    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
+        Car car = carService.getCarById(id);
+        return ResponseEntity.ok(car);
     }
 
     @PutMapping("/{id}")
-    public Car updateCar(@PathVariable Long id,
-                         @RequestBody Car car) {
-        return carService.updateCar(id, car.getMake(), car.getModel(), car.getPower(), car.getTopSpeed());
+    public ResponseEntity<Car> updateCar(@PathVariable Long id,
+                                         @RequestBody Car car) {
+        Car updatedCar = carService.updateCar(id, car.getMake(), car.getModel(), car.getPower(), car.getTopSpeed());
+        return ResponseEntity.ok(updatedCar);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
         carService.deleteCarById(id);
+        return ResponseEntity.noContent().build();
     }
 }
