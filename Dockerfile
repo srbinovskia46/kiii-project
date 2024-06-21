@@ -21,6 +21,9 @@ COPY mvnw .
 COPY mvnw.cmd .
 COPY pom.xml .
 
+# Set executable permissions for mvnw
+RUN chmod +x mvnw
+
 # Copy the rest of your application source
 COPY src ./src
 
