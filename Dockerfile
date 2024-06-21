@@ -21,9 +21,6 @@ COPY mvnw .
 COPY mvnw.cmd .
 COPY pom.xml .
 
-# Set executable permissions on the Maven wrapper script
-RUN chmod +x mvnw
-
 # Copy the rest of your application source
 COPY src ./src
 
@@ -37,8 +34,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file from the builder stage
-COPY target/CarApp-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/CarApp-0.0.1-SNAPSHOT.jar app.jar
 
 # Command to run the application
 CMD ["java", "-jar", "app.jar"]
-
