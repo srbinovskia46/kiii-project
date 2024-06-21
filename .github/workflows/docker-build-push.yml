@@ -13,18 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ github.token }}
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml -DskipTests
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -37,12 +25,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile  # Path to your Dockerfile relative to context
           push: true
-          tags: |
-            srbinovskia46/carapp:latest
-            srbinovskia46/carapp:${{ github.sha }}
+          tags: srbinovskia46/carapp:latest
