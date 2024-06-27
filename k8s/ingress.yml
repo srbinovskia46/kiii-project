@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: carapp-ingress
+  namespace: carapp-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: carapp
+    http:
+      paths:
+      - path: /cars
+        pathType: Prefix
+        backend:
+          service:
+            name: carapp-service
+            port:
+              number: 80

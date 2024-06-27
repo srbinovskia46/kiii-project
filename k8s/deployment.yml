@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-app
+  namespace: carapp-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: spring-boot-app
+    spec:
+      containers:
+        - name: spring-boot-container
+          image: srbinovskia46/carapp:latest
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-service:5432/CarApp
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: carapp-secrets 
+                  key: SPRING_DATASOURCE_USERNAME 
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carapp-secrets 
+                  key: SPRING_DATASOURCE_PASSWORD  
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: carapp-secrets
+                  key: POSTGRES_USER 
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carapp-secrets 
+                  key: POSTGRES_PASSWORD
